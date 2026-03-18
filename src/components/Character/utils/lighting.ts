@@ -19,7 +19,7 @@ const setLighting = (scene: THREE.Scene) => {
   scene.add(pointLight);
 
   new RGBELoader()
-    .setPath("/models/")
+    .setPath(`${import.meta.env.BASE_URL}models/`)
     .load("char_enviorment.hdr?v=2", function (texture) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
@@ -27,11 +27,14 @@ const setLighting = (scene: THREE.Scene) => {
       scene.environmentRotation.set(5.76, 85.85, 1);
     });
 
-  function setPointLight(screenLight: any) {
-    if (screenLight.material.opacity > 0.9) {
-      pointLight.intensity = screenLight.material.emissiveIntensity * 20;
-    } else {
-      pointLight.intensity = 0;
+  function setPointLight(screenLight: THREE.Object3D | null) {
+    if (screenLight && screenLight instanceof THREE.Mesh) {
+      const material = screenLight.material as THREE.MeshStandardMaterial;
+      if (material.opacity > 0.9) {
+        pointLight.intensity = material.emissiveIntensity * 20;
+      } else {
+        pointLight.intensity = 0;
+      }
     }
   }
   const duration = 2;

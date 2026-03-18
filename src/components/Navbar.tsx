@@ -4,13 +4,13 @@ import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
+import { setSmoother } from "../utils/globals";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
+    const smootherInstance = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
       smooth: 1.7,
@@ -19,19 +19,21 @@ const Navbar = () => {
       autoResize: true,
       ignoreMobileResize: true,
     });
+    setSmoother(smootherInstance);
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
+    smootherInstance.scrollTop(0);
+    smootherInstance.paused(true);
 
-    let links = document.querySelectorAll(".header ul a");
+    const links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
+      const element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+          const elem = e.currentTarget as HTMLAnchorElement;
+          const section = elem.getAttribute("data-href");
+          const s = ScrollSmoother.get();
+          if (s) s.scrollTo(section, true, "top top");
         }
       });
     });

@@ -1,8 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-// @ts-ignore
 import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
-// @ts-ignore
+// @ts-expect-error - GSAP Business SplitText plugin
 import { SplitText } from "gsap-trial/SplitText";
 
 interface ParaElement extends HTMLElement {
